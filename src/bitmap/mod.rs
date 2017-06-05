@@ -1,8 +1,6 @@
 // TODO: There are a lot of non-standard naming in this mod,
 // if you are a patient developer, please help us to modify it
-use std::io;
-use std::io::prelude::*;
-use std::fs::File;
+use super::document::Document;
 
 // FIXME: Please modify all the identifiers which named with the Camel-Case rule
 struct BitMapFileHeader {
@@ -60,7 +58,7 @@ impl Image {
         Image {
             width: 0,
             height: 0,
-            channels: 0,
+            channels: 1,
             image_data: Vec::new(),
         }
     }
@@ -68,6 +66,11 @@ impl Image {
     pub fn load(&mut self, path: &str) -> bool {
         // TODO: Complete this function
         let mut bmp_file_header = BitMapFileHeader::new();
+		let mut file: Document = Document::new(path);
+		match file.read() {
+			Err(e) => println!("{}", e),
+			_ => {},
+		}
         true
     }
 
