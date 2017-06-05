@@ -1,0 +1,12 @@
+[package]
+name = "xifeng"
+version = "0.0.1"
+license = "MIT"
+
+[lib]
+name = "xifeng"
+path = "./src/lib.rs"
+
+[[bin]]
+name = "main"
+path = "./examples/main.rs"
