@@ -66,11 +66,11 @@ impl Image {
     pub fn load(&mut self, path: &str) -> bool {
         // TODO: Complete this function
         let mut bmp_file_header = BitMapFileHeader::new();
-		let mut file: Document = Document::new(path);
-		match file.read() {
-			Err(e) => println!("{}", e),
-			_ => {},
-		}
+        let mut file: Document = Document::new(path);
+        match file.read() {
+            Err(e) => println!("{}", e),
+            _ => {},
+        }
         true
     }
 
