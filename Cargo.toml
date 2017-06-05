@@ -9,4 +9,4 @@ path = "./src/lib.rs"
 
 [[bin]]
 name = "main"
-path = "./examples/main.rs"
+path = "./src/examples/main.rs"
