@@ -8,5 +8,5 @@ name = "xifeng"
 path = "./src/lib.rs"
 
 [[bin]]
-name = "main"
-path = "./src/examples/main.rs"
+name = "document"
+path = "./src/examples/document.rs"

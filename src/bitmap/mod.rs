@@ -38,6 +38,24 @@ struct BitMapInfoHeader {
     biClrImportant: u32,
 }
 
+impl BitMapInfoHeader {
+	fn new() -> Self {
+		BitMapInfoHeader {
+			biSize: 0,
+			biWidth: 0,
+			biHeight: 0,
+			biPlanes: 0,
+			biBitCount: 0,
+			biCompression: 0,
+			biSizeImage: 0,
+			biXPelsPerMeter: 0,
+			biYPelsPerMeter: 0,
+			biClrUsed: 0,
+			biClrImportant: 0,
+		}
+	}
+}
+
 // FIXME: Please modify all the identifiers which named with the Camel-Case rule
 struct RgbQuad {
     rgbBlue: u8,
@@ -50,6 +68,8 @@ pub struct Image {
     width: u32,
     height: u32,
     channels: u32,
+	file_header: BitMapFileHeader,
+	info_header: BitMapInfoHeader,
     image_data: Vec<u8>,
 }
 
@@ -59,6 +79,8 @@ impl Image {
             width: 0,
             height: 0,
             channels: 1,
+			file_header: BitMapFileHeader::new(),
+			info_header: BitMapInfoHeader::new(),
             image_data: Vec::new(),
         }
     }
@@ -68,9 +90,19 @@ impl Image {
         let mut bmp_file_header = BitMapFileHeader::new();
         let mut file: Document = Document::new(path);
         match file.read() {
-            Err(e) => println!("{}", e),
+            Err(e) => {println!("{}", e); return false;},
             _ => {},
         }
+		let date = file.date();
+		if press(&date[0..2]) != 0x4D42 {
+			println!("Not BitMap file");
+			return false;
+		}
+		bmp_file_header.bfSize = press(&date[2..7]) as u32;
+		bmp_file_header.bfReserved1 = press(&date[7..10]) as u16;
+		bmp_file_header.bfReserved2 = press(&date[10..13]) as u16;
+		bmp_file_header.bfOffBits = press(&date[13..18]) as u32;
+		self.file_header = bmp_file_header;
         true
     }
 
@@ -90,4 +122,13 @@ impl Image {
     pub fn channels(&self) -> u32 {
         self.channels
     }
+}
+
+fn press(bit: &[u8]) -> usize {
+    let mut foo: usize = 0;
+    for i in bit {
+        foo *= 256;
+        foo += *i as usize;
+    }
+    foo
 }
